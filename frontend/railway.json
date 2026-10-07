@@ -1,0 +1,9 @@
+{
+  "$schema": "https://railway.com/railway.schema.json",
+  "build": {
+    "buildCommand": "yarn install --frozen-lockfile && CI=false yarn build"
+  },
+  "deploy": {
+    "startCommand": "node server.js"
+  }
+}
