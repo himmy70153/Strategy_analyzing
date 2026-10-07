@@ -1,0 +1,25 @@
+{
+  "summary": "Verified Railway deployment config (/app/frontend/railway.json + /app/frontend/server.js) end-to-end. CI=false yarn build compiled cleanly (main.ba238246.js 196.47 kB gz) and build/samples/{dynamic.html,smc.html} exist. Started production server with PORT=5077 node server.js: GET / → 200 text/html, /samples/smc.html → 200 text/html, /samples/dynamic.html → 200 text/html, unknown route /foo/bar → 200 serving index.html (SPA fallback), /static/js/main.ba238246.js → 200 application/javascript. Path traversal attempts (/../../etc/passwd both plain and url-encoded %2e%2e via curl --path-as-is) safely returned the SPA index.html (200 text/html) with no leakage of system files — server.js guards with path.normalize + startsWith(root). Playwright drove http://localhost:5077/: clicking load-sample-data-button yielded exact expected KPIs — kpi-card-total-trades=417, kpi-card-total-profit=+$841.38 (84.14% ROI · final $1,841.38), kpi-card-profit-factor=1.46 (GP $2,672.66 / GL -$1,831.28), kpi-card-max-drawdown=-$152.96 (9.59% · 2026.07.16 16:02:38 → 2026.08.04 11:03:40). Preview URL (REACT_APP_BACKEND_URL) sample-load still works and shows identical values. Local port 5077 server was killed after tests (port confirmed free).",
+  "backend_issues": {"critical": [], "minor": []},
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [],
+  "action_items": [
+    "Deployment: user must set Railway service 'Root Directory' = 'frontend' as the railway.json lives there (Railpack root-detection error otherwise). Document this in README/deploy notes."
+  ],
+  "critical_code_review_comments": [
+    "server.js SPA fallback uses status 200 for every missing path including static assets (fonts/images). This is acceptable for CRA SPA but a strict static server would return 404 for /static/* misses to avoid masking broken asset links. Consider returning 404 when the request path begins with /static/ or has a non-html extension and the file is absent.",
+    "server.js has no gzip/brotli, no caching headers (Cache-Control / ETag). For a static CRA build fingerprinted under /static/*, long-cache (immutable, 1y) + no-cache on index.html would improve Railway perf. Non-blocking.",
+    "railway.json buildCommand runs 'yarn install --frozen-lockfile && CI=false yarn build' — fine, but Railway/Nixpacks typically installs deps automatically; keeping it explicit is safe. No change needed."
+  ],
+  "updated_files": [],
+  "success_rate": {"backend": "N/A", "frontend": "100%"},
+  "test_credentials": "none required",
+  "seed_data_creation": "none — used bundled /samples/dynamic.html and /samples/smc.html",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Railway deploy config lives in /app/frontend/railway.json and the start script is /app/frontend/server.js (dependency-free, listens on process.env.PORT, SPA fallback, path-traversal protected). To re-verify locally: cd /app/frontend && CI=false yarn build && PORT=5077 node server.js & then curl / and /samples/*.html and run Playwright with load-sample-data-button to confirm KPIs 417 / +$841.38 / 1.46 / -$152.96. Remember to kill the node process after. User must set Railway Root Directory to 'frontend'."
+}
