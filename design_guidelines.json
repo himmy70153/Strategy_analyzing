@@ -99,6 +99,11 @@
       "data_testid": "monthly-performance-matrix"
     },
     {
+      "name": "ProfitCalendar",
+      "description": "FTMO-style calendar of the combined portfolio: every day of a selected month as a heat cell with that day's net P&L (and % of the opening balance), a right-hand weekly total column, and a top toggle between 'Days' and 'Weeks'. Weeks mode lists each week of the month with the days combined (period, trading days, trades, win/loss days, week return, week P&L) and expands into per-day chips. Month arrows plus a month picker walk the full uploaded backtest range; a summary strip shows month net, trading days, trades, best/worst/average day; clicking a day lists its deals with exact timestamps.",
+      "data_testid": "profit-calendar-container"
+    },
+    {
       "name": "WorstBestDaysList",
       "description": "Detailed log of top chronological drawdown days (e.g. 10 Sept where multiple strategies hit Stop Loss simultaneously), highlighting overlapping deal timestamps and cumulative daily drawdown impact.",
       "data_testid": "worst-best-days-list"
