@@ -10,6 +10,7 @@ import { EquityChart } from "./components/EquityChart";
 import { ReportTable } from "./components/ReportTable";
 import { MonthlyTable } from "./components/MonthlyTable";
 import { WorstDays, DrawdownWindow } from "./components/WorstDays";
+import { ProfitCalendar } from "./components/ProfitCalendar";
 
 const SAMPLES = ["dynamic.html", "smc.html"];
 
@@ -103,6 +104,7 @@ function App() {
                 <KpiGrid p={portfolio} activeCount={active.length} />
                 <EquityChart p={portfolio} />
                 <DrawdownWindow p={portfolio} colorOf={colorOf} />
+                <ProfitCalendar p={portfolio} colorOf={colorOf} />
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 items-start">
                   <MonthlyTable p={portfolio} reports={active} />
                   <WorstDays p={portfolio} colorOf={colorOf} />
